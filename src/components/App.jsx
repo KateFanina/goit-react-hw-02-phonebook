@@ -3,6 +3,15 @@ import { nanoid } from 'nanoid'
 import ContactForm from './contactForm';
 import Filter from './filter';
 import ContactList from './contactList';
+import styled from 'styled-components';
+
+const TitleMain = styled.h1`
+  font-size: 40px
+`;
+
+const TitleList = styled.h2`
+  font-size: 40px
+`;
 
 class App extends Component {
   constructor() {
@@ -28,12 +37,19 @@ class App extends Component {
     actions.resetForm();
   };
 
+  onDelete = (id) => {
+    const { contacts } = this.state;
+    const newContacts = [...contacts];
+    this.setState({
+      contacts: newContacts.filter(contact => contact.id !== id)
+    })
+  }
+
   render() {
-    
+    const { contacts } = this.state;
     return (
       <div
         style={{
-          height: '100vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -42,15 +58,19 @@ class App extends Component {
         }}
       >
         <div>
-          <h1>Phonebook</h1>
+          <TitleMain>Phonebook</TitleMain>
           <ContactForm
             handleSubmit={(values, actions) => 
               this.handleSubmit(values, actions)}
           />
 
-          <h2>Contacts</h2>
+          <TitleList>Contacts</TitleList>
           <Filter />
-          <ContactList />
+          <ContactList
+            contacts={contacts}
+            onDelete={(id) => 
+              this.onDelete(id)}
+            />
         </div>
       </div>
     );
