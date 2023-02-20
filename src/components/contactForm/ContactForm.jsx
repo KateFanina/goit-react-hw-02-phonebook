@@ -9,6 +9,7 @@ const initialValues = {
 
 const CompleteForm = styled(Form)`
   border: 2px solid black;
+  margin-bottom: 20px;
   padding: 20px;
   width: 300px;
 `;
@@ -24,6 +25,9 @@ const Label = styled.label`
 const Input = styled(Field)`
   color: #2a2a2a;
   font-size: 18px;
+  &:focus {
+    outline-color: #2196f3;
+  }
 `;
 
 const Button = styled.button`

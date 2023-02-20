@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Li = styled.li`
-  margin-bottom: 10px;
   display: grid;
-  grid-template-columns: 3fr 80px
+  grid-template-columns: 3fr 80px;
+  margin-bottom: 16px;
 `;
 
 const Ul = styled.ul`
@@ -31,12 +31,17 @@ const Button = styled.button`
 
 const ContactList = props => {
   const { 
-    contacts, 
-    onDelete, 
+    contacts,
+    filter,
+    onDelete,
   } = props;
   return (
     <Ul>
-      {contacts.map(contact => (
+      {contacts
+      .filter(contact => contact.name.toLowerCase()
+        .includes(filter.toLowerCase())
+        ||  contact.number.includes(filter))
+      .map(contact => (
         <Li key={contact.id}>
           <Paragraph>
             {`${contact.name}: ${contact.number}`}
@@ -52,6 +57,7 @@ const ContactList = props => {
 
 ContactList.propTypes = {
   contacts: PropTypes.array.isRequired,
+  filter: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 
