@@ -23,11 +23,41 @@ class App extends Component {
     this.state = {
       contacts: [],
       filter: '',
-    }
+    };
   }
+
+  validateExcistContact = ({
+    contacts,
+    values,
+  }) => {
+    const messages = [];
+    if (contacts.some(contact => contact.number === values.number)) {
+      const user = contacts
+        .find(contact => contact.number === values.number).name;
+      messages.push(`${values.number} is already belongs to ${user}!`);
+    }
+    if (contacts.some(contact => contact.name === values.name)) {
+      const phone = contacts
+        .find(contact => contact.name === values.name).number;
+      messages
+      .push(`${values.name} is already containce in phonebook with phone ${phone}!`);
+    }
+    if (messages.length) {
+      alert(messages.join('\n'));
+    }
+    return !!messages.length;
+  };
 
   handleSubmit = (values, actions) => {
     const { contacts } = this.state;
+    if (
+      this.validateExcistContact({
+        contacts,
+        values,
+      })
+    ) {
+      return;
+    }
     const newContacts = [...contacts];
     this.setState({
       contacts: [
@@ -42,20 +72,20 @@ class App extends Component {
     actions.resetForm();
   };
 
-  onDelete = (id) => {
+  onDelete = id => {
     const { contacts } = this.state;
     const newContacts = [...contacts];
     this.setState({
-      contacts: newContacts.filter(contact => contact.id !== id)
+      contacts: newContacts.filter(contact => contact.id !== id),
     });
-  }
+  };
 
-  handleFilter = (event) => {
-    console.log({event});
+  handleFilter = event => {
+    console.log({ event });
     this.setState({
       filter: event.target.value,
     });
-  }
+  };
 
   render() {
     const { contacts, filter } = this.state;
@@ -72,18 +102,18 @@ class App extends Component {
         <div>
           <TitleMain>Phonebook</TitleMain>
           <ContactForm
-            handleSubmit={(values, actions) => 
-              this.handleSubmit(values, actions)}
+            handleSubmit={(values, actions) =>
+              this.handleSubmit(values, actions)
+            }
           />
 
           <TitleList>Contacts</TitleList>
-          <Filter handleFilter={(e) => this.handleFilter(e)} />
+          <Filter handleFilter={e => this.handleFilter(e)} />
           <ContactList
             contacts={contacts}
             filter={filter}
-            onDelete={(id) => 
-              this.onDelete(id)}
-            />
+            onDelete={id => this.onDelete(id)}
+          />
         </div>
       </div>
     );
